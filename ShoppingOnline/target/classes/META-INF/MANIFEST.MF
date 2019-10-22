@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: ShoppingOnline
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: 15404
+Implementation-Vendor-Id: FLSM
+Build-Jdk: 1.8.0_201
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/ShoppingOnline
+Created-By: Maven Integration for Eclipse
+
