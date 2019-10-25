@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.flsm.pojo.users;
+import com.flsm.pojo.Users;
 
 public interface IUserService {
 	/**
@@ -13,7 +13,7 @@ public interface IUserService {
 	 * @param pwd
 	 * @return
 	 */
-	users login(String zhanghao,String pwd);
+	Users login(String zhanghao,String pwd);
 	/**
 	 * 忘记手机号方法
 	 * @param phone
@@ -33,7 +33,7 @@ public interface IUserService {
 	 * @param emailorPhone
 	 * @return
 	 */
-	 List<users> FidUserTelOrEmail(String emailorPhone);
+	 List<Users> FidUserTelOrEmail(String emailorPhone);
 	 /**
 	  * 手机或邮箱验证码是否正确
 	  * @param phoneOrEmail

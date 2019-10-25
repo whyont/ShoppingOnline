@@ -2,13 +2,13 @@ package com.flsm.mapper;
 
 import org.springframework.stereotype.Repository;
 
-import com.flsm.pojo.users;
+import com.flsm.pojo.Users;
 
 import tk.mybatis.mapper.common.Mapper;
 
 @Repository
-public interface UserMapper extends Mapper<users>{
+public interface IUsersMapper extends Mapper<Users>{
 	
-	users login(String zhanghao,String pwd);
+	
 
 }

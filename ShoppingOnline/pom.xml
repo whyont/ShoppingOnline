@@ -51,11 +51,11 @@
 		<artifactId>pagehelper</artifactId>
 		<version>4.1.6</version>
 	</dependency>
-	<!-- orcale -->
+	<!-- mysql -->
 	<dependency>
-	    <groupId>com.oracle</groupId>
-	    <artifactId>ojdbc14</artifactId>
-	    <version>10.2.0.1.0</version>
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	    <version>5.1.30</version>
 	</dependency>
 	<!--mybatis日志管理  -->
 	<dependency>

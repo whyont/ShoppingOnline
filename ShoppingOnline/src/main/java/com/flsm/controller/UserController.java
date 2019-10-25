@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.flsm.pojo.users;
+import com.flsm.pojo.Users;
 import com.flsm.service.IUserService;
 
 
@@ -36,7 +36,7 @@ public class UserController {
 	 */
 	@RequestMapping("login")
 	public String login(String zhanghao,String pwd,HttpSession session) {
-		users myself = userService.login(zhanghao, pwd);
+		Users myself = userService.login(zhanghao, pwd);
 		if(myself!=null) {
 			session.setAttribute("myself", myself);
 			return "home/home.html";

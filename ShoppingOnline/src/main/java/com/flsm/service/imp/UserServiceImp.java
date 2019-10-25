@@ -18,8 +18,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.flsm.mapper.UserMapper;
-import com.flsm.pojo.users;
+import com.flsm.mapper.IUsersMapper;
+import com.flsm.pojo.Users;
 import com.flsm.service.IUserService;
 import com.flsm.util.EamlUtil;
 
@@ -29,11 +29,16 @@ import tk.mybatis.mapper.entity.Example;
 public class UserServiceImp implements IUserService{
 	
 	@Autowired
-	UserMapper usermapper;
+	IUsersMapper usermapper;
 
 	@Override
-	public users login(String zhanghao,String pwd) {
-		return usermapper.login(zhanghao, pwd);
+	public Users login(String zhanghao,String pwd) {
+		
+		Example example=new Example(Users.class);
+		example.createCriteria().orEqualTo("uemail", zhanghao).orEqualTo("uphone", zhanghao).orEqualTo("uname",zhanghao).andEqualTo("upwd",pwd);
+		List<Users> list = usermapper.selectByExample(example);
+		
+		return list.size()>0?list.get(0):null;
 	}
 	@Override
 	public String PhoneVerificationCode(String phone, HttpServletRequest re) {
@@ -90,10 +95,10 @@ public class UserServiceImp implements IUserService{
 	}
 
 	@Override
-	public List<users> FidUserTelOrEmail(String emailorPhone) {
-		Example e=new Example(users.class);
-		e.createCriteria().orEqualTo("email", emailorPhone).orEqualTo("tellphone", emailorPhone);
-		List<users> list = usermapper.selectByExample(e);
+	public List<Users> FidUserTelOrEmail(String emailorPhone) {
+		Example e=new Example(Users.class);
+		e.createCriteria().orEqualTo("uemail", emailorPhone).orEqualTo("uphone", emailorPhone);
+		List<Users> list = usermapper.selectByExample(e);
 		return list;
 	}
 
@@ -121,13 +126,13 @@ public class UserServiceImp implements IUserService{
 		// TODO Auto-generated method stub
 		String password = (String) request.getParameter("password");
 		String attribute = (String) request.getSession().getAttribute("resetusername");
-		users users = FidUserTelOrEmail(attribute).get(0);
+		Users users = FidUserTelOrEmail(attribute).get(0);
 		System.out.println(users);
 		if(password==null||attribute==null||users==null) {
 			return false;
 		}
 		System.out.println(users);
-		users.setPwd(password);
+		users.setUpwd(password);
 		usermapper.updateByPrimaryKeySelective(users);
 		return true;
 	}

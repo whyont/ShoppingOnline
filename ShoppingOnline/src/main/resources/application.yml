@@ -1,7 +1,11 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:oracle:thin:@localhost:1521/orcl
-    driver-class-name: oracle.jdbc.OracleDriver
-    username: scott
-    password: scott
+    url: jdbc:mysql:///shoppingonline?characterEncoding=UTF-8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 
+logging:
+  level:
+   com.flsm.mapper: debug
+    
