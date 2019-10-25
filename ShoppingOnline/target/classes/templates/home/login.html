@@ -5,12 +5,10 @@
 <meta charset="UTF-8">
 <title>登录</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="format-detection" content="telephone=no">
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-
 <link rel="stylesheet" href="../AmazeUI-2.4.2/assets/css/amazeui.css" />
 <link href="../css/dlstyle.css" rel="stylesheet" type="text/css">
 </head>
@@ -32,38 +30,40 @@
 
 				<div class="clear"></div>
 
-				<div class="login-form">
-					<form>
-						<div class="user-name">
-							<label for="user"><i class="am-icon-user"></i></label> <input
-								type="text" name="" id="user" placeholder="邮箱/手机/用户名">
-						</div>
-						<div class="user-pass">
-							<label for="password"><i class="am-icon-lock"></i></label> <input
-								type="password" name="" id="password" placeholder="请输入密码">
-						</div>
-					</form>
-				</div>
-
-				<div class="login-links">
-					<label for="remember-me"><input id="remember-me"
-						type="checkbox">记住密码</label> <a href="#" class="am-fr">忘记密码</a> <a
-						href="register.jsp" class="zcnext am-fr am-btn-default">注册</a> <br />
-				</div>
-				<div class="am-cf">
-					<input type="submit" name="" value="登 录"
-						class="am-btn am-btn-primary am-btn-sm">
-				</div>
-				<div class="partner">
-					<h3>合作账号</h3>
-					<div class="am-btn-group">
-						<li><a href="#"><i class="am-icon-qq am-icon-sm"></i><span>QQ登录</span></a></li>
-						<li><a href="#"><i class="am-icon-weibo am-icon-sm"></i><span>微博登录</span>
-						</a></li>
-						<li><a href="#"><i class="am-icon-weixin am-icon-sm"></i><span>微信登录</span>
-						</a></li>
+					<div class="login-form">
+						<form action="login" id="loginForm">
+							<div class="user-name">
+								<label for="user"><i class="am-icon-user"></i></label> <input
+									type="text" name="zhanghao" id="user" placeholder="邮箱/手机/用户名">
+							</div>
+							<div class="user-pass">
+								<label for="password"><i class="am-icon-lock"></i></label> <input
+									type="password" name="pwd" id="password" placeholder="请输入密码">
+							</div>
+						</form>
 					</div>
-				</div>
+				
+					<div class="login-links">
+						<label for="remember-me">
+							<input id="remember-me" type="checkbox" >记住密码
+						</label>
+						<a href="ForgetPassword" class="am-fr">忘记密码</a>
+						<a href="register.html" class="zcnext am-fr am-btn-default">注册</a><br />
+					</div>
+					<div class="am-cf">
+						<input type="submit" name="" onclick="submit('loginForm')" value="登 录" class="am-btn am-btn-primary am-btn-sm">
+					</div>
+					<div class="partner">
+						<h3>合作账号</h3>
+						<div class="am-btn-group">
+							<li><a href="#"><i class="am-icon-qq am-icon-sm"></i><span>QQ登录</span></a></li>
+							<li><a href="#"><i class="am-icon-weibo am-icon-sm"></i><span>微博登录</span>
+							</a></li>
+							<li><a href="#"><i class="am-icon-weixin am-icon-sm"></i><span>微信登录</span>
+							</a></li>
+						</div>
+					</div>
+				
 
 			</div>
 		</div>
@@ -85,6 +85,71 @@
 			</p>
 		</div>
 	</div>
+	<script>
+		 
+		    var oForm = document.getElementById('loginForm');
+		    var oUser = document.getElementById('user');
+		    var oPswd = document.getElementById('password');
+		    var oRemember = document.getElementById('remember-me');
+		    
+		    //页面初始化时，如果帐号密码cookie存在则填充
+		    if(getCookie('user') && getCookie('password')){
+		      oUser.value = getCookie('user');
+		      oPswd.value = getCookie('password');
+		      alert("oPswd");
+		      oRemember.checked = true;
+		    }
+		    //复选框勾选状态发生改变时，如果未勾选则清除cookie
+		    oRemember.onchange = function(){
+		      if(!this.checked){
+		        delCookie('user');
+		        delCookie('password');
+		      }
+		    };
+		    //表单提交事件触发时，如果复选框是勾选状态则保存cookie
+		    /* oForm.onsubmit = function(){
+		    	
+		    }; */
+		    function submit(id){
+				  alert("1");
+			      if(oRemember.checked){ 
+			        setCookie('user',oUser.value,7); //保存帐号到cookie，有效期7天
+			        setCookie('password',oPswd.value,7); //保存密码到cookie，有效期7天
+			      }
+				  document.getElementById(id).submit();
+			  }
+		 
+		  //设置cookie
+		  function setCookie(name,value,day){
+		    var date = new Date();
+		    date.setDate(date.getDate() + day);
+		    document.cookie = name + '=' + value + ';expires='+ date;
+		  };
+		  //获取cookie
+		  function getCookie(name){
+		    var reg = RegExp(name+'=([^;]+)');
+		    var arr = document.cookie.match(reg);
+		    if(arr){
+		      return arr[1];
+		    }else{
+		      return '';
+		    }
+		  };
+		  //删除cookie
+		  function delCookie(name){
+		    setCookie(name,null,-1);
+		  };
+		  //提交
+		  function submit(id){
+			  alert("1");
+		      if(oRemember.checked){ 
+		        setCookie('user',oUser.value,7); //保存帐号到cookie，有效期7天
+		        setCookie('password',oPswd.value,7); //保存密码到cookie，有效期7天
+		      }
+			  document.getElementById(id).submit();
+		  }
+		 
+	</script>
 </body>
 
 </html>
