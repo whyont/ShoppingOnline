@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
 <head lang="en">
 <meta charset="UTF-8">
 <title>注册</title>
@@ -16,6 +15,7 @@
 <link href="../css/dlstyle.css" rel="stylesheet" type="text/css">
 <script src="../AmazeUI-2.4.2/assets/js/jquery.min.js"></script>
 <script src="../AmazeUI-2.4.2/assets/js/amazeui.min.js"></script>
+<script src="../layer/layer.js"></script>
 
 </head>
 
@@ -40,19 +40,20 @@
 
 					<div class="am-tabs-bd">
 						<div class="am-tab-panel am-active">
-							<form method="post">
+							<form method="post" action="UserRegister" id="emailfrom">
 
 								<div class="user-email">
-									<label for="email"><i class="am-icon-envelope-o"></i></label> <input
-										type="email" name="" id="email" placeholder="请输入邮箱账号">
+									<label for="email"><i class="am-icon-envelope-o" style="margin-top: 10px;"></i></label> <input
+										type="email" name="email" id="email" placeholder="请输入邮箱账号">
 								</div>
 								<div class="user-pass">
-									<label for="password"><i class="am-icon-lock"></i></label> <input
-										type="password" name="" id="password" placeholder="设置密码">
+									<label for="password"><i class="am-icon-lock" style="margin-top: 10px;" ></i></label> <input
+										type="password" name="pwd" id="emailpassword"
+										placeholder="设置密码">
 								</div>
 								<div class="user-pass">
-									<label for="passwordRepeat"><i class="am-icon-lock"></i></label>
-									<input type="password" name="" id="passwordRepeat"
+									<label for="passwordRepeat"><i class="am-icon-lock" style="margin-top: 10px;"></i></label>
+									<input type="password" name="" id="emailpasswordRepeat"
 										placeholder="确认密码">
 								</div>
 
@@ -64,44 +65,41 @@
 								</label>
 							</div>
 							<div class="am-cf">
-								<input type="submit" name="" value="注册"
+								<input type="submit" name="" value="注册" id="btnregister"
 									class="am-btn am-btn-primary am-btn-sm am-fl">
 							</div>
 
 						</div>
-
 						<div class="am-tab-panel">
-							<form method="post">
+							<form method="post" id="form"  action="register">
 								<div class="user-phone">
 									<label for="phone"><i
 										class="am-icon-mobile-phone am-icon-md"></i></label> <input type="tel"
-										name="" id="phone" placeholder="请输入手机号">
+										name="tel" id="phone" placeholder="请输入手机号">
 								</div>
 								<div class="verification">
 									<label for="code"><i class="am-icon-code-fork"></i></label> <input
-										type="tel" name="" id="code" placeholder="请输入验证码"> <a
-										class="btn" href="javascript:void(0);"
-										onclick="sendMobileCode();" id="sendMobileCode"> <span
-										id="dyMobileButton">获取</span></a>
+										type="text" name="code" id="code" placeholder="请输入验证码"> <a
+										class="btn" 
+										onclick="sendMobileCode();" id="sendMobileCode"> <input style="font-size: 11px;" type="button" id="dyMobileButton" value="获取" onclick="sendemail()" /> </a>
 								</div>
 								<div class="user-pass">
 									<label for="password"><i class="am-icon-lock"></i></label> <input
-										type="password" name="" id="password" placeholder="设置密码">
+										type="password" name="pwd" id="password" placeholder="设置密码">
 								</div>
 								<div class="user-pass">
 									<label for="passwordRepeat"><i class="am-icon-lock"></i></label>
-									<input type="password" name="" id="passwordRepeat"
-										placeholder="确认密码">
+									<input type="password" name="npwd" id="passwordRepeat" placeholder="确认密码">
 								</div>
 							</form>
 							<div class="login-links">
 								<label for="reader-me"> <input id="reader-me"
-									type="checkbox"> 点击表示您同意商城《服务协议》
+									type="checkbox" name="agree" radio="checked"> 点击表示您同意商城《服务协议》
 								</label>
 							</div>
 							<div class="am-cf">
 								<input type="submit" name="" value="注册"
-									class="am-btn am-btn-primary am-btn-sm am-fl">
+									class="am-btn am-btn-primary am-btn-sm am-fl" onclick="$('#form').submit();">
 							</div>
 
 							<hr>
@@ -111,6 +109,12 @@
 							$(function() {
 								$('#doc-my-tabs').tabs();
 							})
+							
+						
+								
+							
+	
+	
 						</script>
 
 					</div>
@@ -135,5 +139,159 @@
 			</div>
 		</div>
 </body>
+
+<script>
+ var b=$('#reader-me').prop('checked');
+ var checkphone=false;
+ var checkpassword=false;
+
+$('#phone').blur(function(){
+	var phone=$('#phone').val();
+	var pattern = /^1[34578]\d{9}$/; 
+	var b=pattern.test(phone);
+	if(!b){//邮箱格式错误
+		layer.tips('X 请输入正确的手机号码','#phone',{
+			tips:[2,'red'],
+			time:0,
+			})
+			//$('#dyMailButton').attr("disabled",true);
+			checkphone=false;
+	}
+	
+})
+var countdown=60; 
+function sendemail(){
+    var obj = $("#dyMobileButton");
+    settime(obj);
+    }
+function settime(obj) { //发送验证码倒计时
+    if (countdown == 0) { 
+        obj.attr('disabled',false); 
+        //obj.removeattr("disabled"); 
+        obj.val("免费获取验证码");
+        countdown = 60; 
+        return;
+    } else { 
+        obj.attr('disabled',true);
+        obj.val("重发(" + countdown + ")");
+        countdown--; 
+    } 
+setTimeout(function() { 
+    settime(obj)},1000) 
+}
+$('#passwordRepeat').blur(function(){
+	var pwd=$('#password').val();
+	var pwd1=$('#passwordRepeat').val();
+	if(pwd!=pwd1){
+		layer.tips('X 原密码与旧密码不匹配','#passwordRepeat',{
+			tips:[2,'red'],
+			time:0,
+			})
+			//$('#dyMailButton').attr("disabled",true);
+			
+			checkpassword=false;
+	}
+	
+})
+
+/* 异步获取验证码 */
+function sendMobileCode(){
+	var phone=$('#phone').val();
+	var code=$('#code').val();
+	var pattern = /^1[34578]\d{9}$/; 
+	var b=pattern.test(phone);	
+	if(b){
+		$.post("/SendPhoneCode",{"phone":phone},function(data){
+		})	
+	}
+}
+var checkemail=false;
+var checkpassword=false;
+$('#email').change(function(){
+	//获取#email的值
+	var email=$('#email').val();
+	//正则表达正确邮箱格式
+	var reg=/^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+	var b=reg.test(email);
+	if(!b){//邮箱格式错误
+		layer.tips('X 请输入正确的邮箱格式','#email',{
+			tips:[2,'red'],
+			time:0,
+			})
+			//$('#dyMailButton').attr("disabled",true);
+		checkemail=false;
+	}else{//判断邮箱是否已被使用
+		$.post("ChekEmail",{'email':email},function(data){
+			if(data){
+
+				layer.tips('X 该邮箱已被注册','#email',{
+					tips:[2,'red'],
+					time:0,
+					})
+				//$('#dyMailButton').attr("disabled",true);
+				checkemail=false;
+			}else{//当邮箱格式正确且未被使用时
+				
+				layer.tips('√','#email',{
+					tips:[2,'green'],
+					time:1000,
+					})
+				checkemail=true;
+				//$('#dyMailButton').attr("disabled",false);
+			}
+		})
+	}
+})	
+
+//验证两次密码是否相同
+$('#emailpasswordRepeat').change(function(){
+	var password = $('#emailpassword').val();
+	var passwordRepeat = $('#emailpasswordRepeat').val();
+	if (password != passwordRepeat){
+		checkpassword=false;
+		
+		layer.tips('X 请输入相同密码','#emailpasswordRepeat',{
+			tips:[2,'red'],
+			time:0,
+			})
+			
+	}else{
+		layer.tips('√','#emailpasswordRepeat',{
+			tips:[2,'green'],
+			time:0,
+			})
+			
+		checkpassword=true;
+	}
+})
+//没勾选服务协议 	或
+//邮箱格式不正确时 或
+//密码不相同时 无法提交表单
+$('#btnregister').click(function(){
+	if($('#reader-me').prop('checked')){
+		//email和password检查通过才能提交表单
+		if(checkpassword&&checkemail){
+			layer.alert("注册成功");
+			$('#emailfrom').submit();
+		}
+	}else{
+		//没勾选服务协议弹窗且无法提交表单
+		layer.tips('请先同意商城《服务协议》','#reader-me',{
+			tips:[3,'red'],
+			time:0,
+			})
+		return false;
+	}
+})
+
+//点击同意服务取消弹框
+$('#reader-me').click(function(){
+	if($('#reader-me').prop('checked')){
+		layer.close(layer.index);
+	}
+})
+
+</script>
+
 
 </html>

@@ -19,12 +19,21 @@ public class UserController {
 	IUserService userService;
 	
 	/**
-	 * 启动跳转页面的方法
+	 * 启动登录跳转页面的方法
 	 * @return
 	 */
-	@RequestMapping("action")
-	public String action() {
+	@RequestMapping("ActionLogin")
+	public String ActionLogin() {
 		return "home/login.html";
+	}
+	
+	/**
+	 * 启动注册跳转页面的方法
+	 * @return
+	 */
+	@RequestMapping("ActionRegister")
+	public String ActionRegister() {
+		return "home/register.html";
 	}
 	
 	/**
@@ -124,9 +133,64 @@ public class UserController {
 	@RequestMapping("ForgetPasswordReset")
 	public String ForgetPasswordReset(HttpServletRequest request) {
 		if(userService.ForgetPasswordReset(request))
-			return "redirect:action";
+			return "redirect:ActionLogin";
 		return "redirect:ForgetPassword";
 		
+	}
+	
+	/**
+	 * 验证该注册用户
+	 * 用户名或者邮箱号是否已存在
+	 * @param tel
+	 * @param pwd
+	 * @return
+	 */
+	@RequestMapping("/ChekEmail")
+	@ResponseBody()
+	public boolean ChekEmail(String email) {
+		return userService.CheckEmail(email);
+	}
+	
+	/**
+	 * 用户邮箱注册
+	 * 
+	 */
+	@RequestMapping("UserRegister")
+	public String UserRegister(String email,String pwd) {
+		userService.UserRigeister(email, pwd);
+		return "redirect:ActionLogin";
+	}
+	
+	/**
+	 * 发送验证码
+	 * @param phone
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/SendPhoneCode")
+	@ResponseBody()
+	public String SendPhoneCode(String phone,HttpSession session) {
+		return userService.SendPhoneCode(phone, session);
+	}
+	
+	/**
+	 * 手机号注册
+	 * @param tel
+	 * @param pwd
+	 * @param code
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("register")
+	public String pregister(String tel,String pwd,String code,HttpSession session) {
+	     Users u = userService.chauser(tel);
+		    if(session.getAttribute(tel).equals(code)&&u==null) { 
+		    	userService.pregister(tel, pwd);
+		    	return "home/login.html";
+		    }
+		    else {
+		    	return "home/register.html";
+		    }
 	}
 
 }

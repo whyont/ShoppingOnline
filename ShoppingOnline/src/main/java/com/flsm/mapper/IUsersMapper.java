@@ -9,6 +9,4 @@ import tk.mybatis.mapper.common.Mapper;
 @Repository
 public interface IUsersMapper extends Mapper<Users>{
 	
-	
-
 }

@@ -48,7 +48,7 @@
 							<input id="remember-me" type="checkbox" >记住密码
 						</label>
 						<a href="ForgetPassword" class="am-fr">忘记密码</a>
-						<a href="register.html" class="zcnext am-fr am-btn-default">注册</a><br />
+						<a href="ActionRegister" class="zcnext am-fr am-btn-default">注册</a><br />
 					</div>
 					<div class="am-cf">
 						<input type="submit" name="" onclick="submit('loginForm')" value="登 录" class="am-btn am-btn-primary am-btn-sm">
@@ -96,7 +96,6 @@
 		    if(getCookie('user') && getCookie('password')){
 		      oUser.value = getCookie('user');
 		      oPswd.value = getCookie('password');
-		      alert("oPswd");
 		      oRemember.checked = true;
 		    }
 		    //复选框勾选状态发生改变时，如果未勾选则清除cookie
@@ -111,7 +110,6 @@
 		    	
 		    }; */
 		    function submit(id){
-				  alert("1");
 			      if(oRemember.checked){ 
 			        setCookie('user',oUser.value,7); //保存帐号到cookie，有效期7天
 			        setCookie('password',oPswd.value,7); //保存密码到cookie，有效期7天
@@ -141,7 +139,6 @@
 		  };
 		  //提交
 		  function submit(id){
-			  alert("1");
 		      if(oRemember.checked){ 
 		        setCookie('user',oUser.value,7); //保存帐号到cookie，有效期7天
 		        setCookie('password',oPswd.value,7); //保存密码到cookie，有效期7天

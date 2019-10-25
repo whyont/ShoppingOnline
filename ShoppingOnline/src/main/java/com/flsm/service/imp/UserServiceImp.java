@@ -1,5 +1,8 @@
 package com.flsm.service.imp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +25,7 @@ import com.flsm.mapper.IUsersMapper;
 import com.flsm.pojo.Users;
 import com.flsm.service.IUserService;
 import com.flsm.util.EamlUtil;
+import com.flsm.util.SendSmsUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -33,11 +37,9 @@ public class UserServiceImp implements IUserService{
 
 	@Override
 	public Users login(String zhanghao,String pwd) {
-		
 		Example example=new Example(Users.class);
 		example.createCriteria().orEqualTo("uemail", zhanghao).orEqualTo("uphone", zhanghao).orEqualTo("uname",zhanghao).andEqualTo("upwd",pwd);
 		List<Users> list = usermapper.selectByExample(example);
-		
 		return list.size()>0?list.get(0):null;
 	}
 	@Override
@@ -49,10 +51,7 @@ public class UserServiceImp implements IUserService{
 			for(int i=0;i<4;i++) {
 				Random r=new Random();
 				code+=r.nextInt(10);
-				
 			}
-			
-			
 			HttpSession session = re.getSession();
 			DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4FcuU7GWeLtSgCQbpTo7", "Jb3As2FqKAa2VV4DqxW8wUTfi1h4Yb");
 	        IAcsClient client = new DefaultAcsClient(profile);
@@ -104,7 +103,6 @@ public class UserServiceImp implements IUserService{
 
 	@Override
 	public boolean ForgetPasswordVerification(String phoneOrEmail, String code, HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		Object attribute = request.getSession().getAttribute(phoneOrEmail);
 		if(attribute!=null&&attribute.equals(code)) {
 			request.getSession().setAttribute("resetusername", phoneOrEmail);
@@ -115,7 +113,6 @@ public class UserServiceImp implements IUserService{
 
 	@Override
 	public boolean ResetPageValidation(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		Object attribute = request.getSession().getAttribute("resetusername");
 		return attribute!=null;
 	}
@@ -123,7 +120,6 @@ public class UserServiceImp implements IUserService{
 	@Override
 	@Transactional
 	public boolean ForgetPasswordReset(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		String password = (String) request.getParameter("password");
 		String attribute = (String) request.getSession().getAttribute("resetusername");
 		Users users = FidUserTelOrEmail(attribute).get(0);
@@ -135,6 +131,56 @@ public class UserServiceImp implements IUserService{
 		users.setUpwd(password);
 		usermapper.updateByPrimaryKeySelective(users);
 		return true;
+	}
+	
+	/**
+	 * 验证邮箱是否存在
+	 */
+	@Override
+	public boolean CheckEmail(String Email) {
+		Users users=new Users();
+		users.setUemail(Email);
+		Users one = usermapper.selectOne(users);
+		return one!=null;
+	}
+
+	/**
+	 * 用户邮箱注册
+	 * 
+	 */
+	@Override
+	public boolean UserRigeister(String email, String pwd) {
+		Users users = new Users();
+		users.setUpwd(pwd);
+		users.setUemail(email);
+		users.setUname(email);
+		DateFormat format= new SimpleDateFormat("YYYY-MM-dd");
+		String format2 = format.format(new Date());
+		users.setUtime(format2);
+		usermapper.insert(users);
+		return true;
+	}
+	
+	@Override
+	public String SendPhoneCode(String phone,HttpSession session) {
+		String code = SendSmsUtil.sendReceiveMSM(phone);
+		session.setAttribute(phone, code);
+		return code;
+	}
+
+	@Override
+	public boolean pregister(String tellphone,String pwd) {
+		Users users =new Users();
+		users.setUphone(tellphone);
+		users.setUpwd(pwd);
+		return usermapper.insert(users)>0;
+	}
+	
+	@Override
+	public Users chauser(String tellphone) {
+		Users users=new Users();
+		users.setUphone(tellphone);
+		return usermapper.selectOne(users);
 	}
 
 }
