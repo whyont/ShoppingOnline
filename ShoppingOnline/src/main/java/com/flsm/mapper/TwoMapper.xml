@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flsm.mapper.TwoMapper">
+<select id="findonebyid" resultMap="twos">
+select *from two where otwid=#{oid}
+</select>
+<resultMap type="com.flsm.pojo.two" id="twos">
+<id property="twid" column="twid"/>
+<result property="otwid" column="otwid"/>
+<result property="twname" column="twname"/>
+
+<collection property="tthrees" ofType="com.flsm.pojo.three" select="com.flsm.mapper.ThreeMapper.findtwobyid" column="twid">
+
+
+
+</collection>
+</resultMap>
+</mapper>

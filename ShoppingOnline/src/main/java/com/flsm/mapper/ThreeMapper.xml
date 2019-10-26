@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flsm.mapper.ThreeMapper">
+<select id="findtwobyid" resultType="com.flsm.pojo.three">
+select *from three where twid=#{otwid}
+</select>
+<resultMap type="com.flsm.pojo.three" id="tt">
+<id property="tid" column="tid"/>
+<result property="twid" column="twid"/>
+<result property="tname" column="tname"/>
+</resultMap>
+</mapper>

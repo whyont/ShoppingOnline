@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flsm.mapper.OneMapper">
+<select id="findall" resultMap="ones">
+select *from one
+</select>
+<resultMap type="com.flsm.pojo.one" id="ones">
+<id property="oid" column="oid"/>
+<result property="oname" column="oname"/>
+<result property="iaddress" column="iaddress"/>
+<collection property="otwo" ofType="com.flsm.pojo.two" select="com.flsm.mapper.TwoMapper.findonebyid" column="oid"></collection>
+</resultMap>
+</mapper>

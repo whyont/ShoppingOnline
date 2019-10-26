@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,13 +15,13 @@
 		<link href="../css/seastyle.css" rel="stylesheet" type="text/css" />
 
 		<script type="text/javascript" src="../basic/js/jquery-1.7.min.js"></script>
-		<script type="text/javascript" src="../js/script.js"></script>
+
 	</head>
 
 	<body>
 
 		<!--顶部导航条 -->
-		<div class="am-container header">
+		<div  class="am-container header">
 			<ul class="message-l">
 				<div class="topMessage">
 					<div class="menu-hd">
@@ -56,7 +56,7 @@
 				<div class="search-bar pr">
 					<a name="index_none_header_sysc" href="#"></a>
 					<form>
-						<input id="searchInput" name="index_none_header_sysc" type="text" placeholder="搜索" autocomplete="off">
+						<input id="searchInput" th:value="${likestring}" name="likestring" type="text" placeholder="智能手机"  autocomplete="off">
 						<input id="ai-topsearch" class="submit am-btn"  value="搜索" index="1" type="submit">
 					</form>
 				</div>
@@ -96,8 +96,8 @@
 							</div>
 							<ul class="select">
 								<p class="title font-normal">
-									<span class="fl">松子</span>
-									<span class="total fl">搜索到<strong class="num">997</strong>件相关商品</span>
+									<span class="fl" th:text="${likestring}">松子</span>
+									<span class="total fl">搜索到<strong class="num" th:text="${count}">997</strong>件相关商品</span>
 								</p>
 								<div class="clear"></div>
 								<li class="select-result">
@@ -113,13 +113,9 @@
 										<dt class="am-badge am-round">品牌</dt>	
 									
 										 <div class="dd-conent">										
-											<dd class="select-all selected"><a href="#">全部</a></dd>
-											<dd><a href="#">百草味</a></dd>
-											<dd><a href="#">良品铺子</a></dd>
-											<dd><a href="#">新农哥</a></dd>
-											<dd><a href="#">楼兰蜜语</a></dd>
-											<dd><a href="#">口水娃</a></dd>
-											<dd><a href="#">考拉兄弟</a></dd>
+											<dd class="select-all" th:class="${brand==null}?'select-all selected':'select-all'"><a th:href="@{productSelectLike(order=${order},likestring=${likestring},type=${type})}">全部</a></dd>
+											
+											<dd th:each="brands:${likeBrand}" th:class="${brand==brands}?'selected':''"><a th:href="@{productSelectLike(brand=${brands},order=${order},likestring=${likestring},type=${type})}" th:text="${brands}">考拉兄弟</a></dd>
 										 </div>
 						
 									</dl>
@@ -128,207 +124,43 @@
 									<dl id="select2">
 										<dt class="am-badge am-round">种类</dt>
 										<div class="dd-conent">
-											<dd class="select-all selected"><a href="#">全部</a></dd>
-											<dd><a href="#">东北松子</a></dd>
-											<dd><a href="#">巴西松子</a></dd>
-											<dd><a href="#">夏威夷果</a></dd>
-											<dd><a href="#">松子</a></dd>
+											<dd class="select-all selected" th:class="${type==null}?'select-all selected':'select-all'"><a th:href="@{productSelectLike(order=${order},likestring=${likestring},brand=${brand})}" href="#">全部</a></dd>
+											<dd th:each="types:${likeType}" th:class="${type==types}?'selected':''"><a th:text="${types}" th:href="@{productSelectLike(order=${order},likestring=${likestring},brand=${brand},type=${types})}" >东北松子</a></dd>
+										
 										</div>
 									</dl>
 								</li>
-								<li class="select-list">
-									<dl id="select3">
-										<dt class="am-badge am-round">选购热点</dt>
-										<div class="dd-conent">
-											<dd class="select-all selected"><a href="#">全部</a></dd>
-											<dd><a href="#">手剥松子</a></dd>
-											<dd><a href="#">薄壳松子</a></dd>
-											<dd><a href="#">进口零食</a></dd>
-											<dd><a href="#">有机零食</a></dd>
-										</div>
-									</dl>
-								</li>
+								
 					        
 							</ul>
 							<div class="clear"></div>
                         </div>
 							<div class="search-content">
 								<div class="sort">
-									<li class="first"><a title="综合">综合排序</a></li>
-									<li><a title="销量">销量排序</a></li>
-									<li><a title="价格">价格优先</a></li>
-									<li class="big"><a title="评价" href="#">评价为主</a></li>
+									<li class="first" th:class="${order==null||order==''}?'first':''"><a title="综合" th:href="@{productSelectLike(likestring=${likestring},brand=${brand},type=${types})}">综合排序</a></li>
+									<li th:class="${order=='count'}?'first':''"><a title="销量" th:href="@{productSelectLike(order='count',likestring=${likestring},brand=${brand},type=${types})}">销量排序</a></li>
+									<li th:class="${order=='price'}?'first':''"><a title="价格" th:href="@{productSelectLike(order='price',likestring=${likestring},brand=${brand},type=${types})}">价格优先</a></li>
+									<li th:class="${order=='ecount'}?'first':''"class="big"><a  th:href="@{productSelectLike(order='ecount',likestring=${likestring},brand=${brand},type=${types})}"title="评价" href="#">评价为主</a></li>
 								</div>
 								<div class="clear"></div>
 
 								<ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 boxes">
-									<li>
+									<li th:each="pro:${list}">
 										<div class="i-pic limit">
-											<img src="../images/imgsearch1.jpg" />											
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
+											<img src="../images/imgsearch1.jpg"  th:src="'../images/'+${pro.imgurl}"/>											
+											<p class="title fl" th:text="${pro.pname}">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
 											<p class="price fl">
 												<b>¥</b>
-												<strong>56.90</strong>
+												<strong th:text="${pro.price}"></strong>
 											</p>
 											<p class="number fl">
-												销量<span>1110</span>
+												销量<span th:text="${pro.Salesvolume}">1110</span>
 											</p>
 										</div>
 									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
-									<li>
-										<div class="i-pic limit">
-											
-											<img src="../images/imgsearch1.jpg" />
-											<p class="title fl">【良品铺子旗舰店】手剥松子218g 坚果炒货零食新货巴西松子包邮</p>
-											<p class="price fl">
-												<b>¥</b>
-												<strong>56.90</strong>
-											</p>
-											<p class="number fl">
-												销量<span>1110</span>
-											</p>
-										</div>
-									</li>
+										
+										
+									
 								</ul>
 							</div>
 							<div class="search-side">
@@ -365,7 +197,7 @@
 								</li>
 								<li>
 									<div class="i-pic check">
-										<img src="../images/cp.jpg" />
+										<img src="../images/cp.jpg"  />
 										<p class="check-title">萨拉米 1+1小鸡腿</p>
 										<p class="price fl">
 											<b>¥</b>
@@ -379,15 +211,14 @@
 
 							</div>
 							<div class="clear"></div>
+							
 							<!--分页 -->
-							<ul class="am-pagination am-pagination-right">
-								<li class="am-disabled"><a href="#">&laquo;</a></li>
-								<li class="am-active"><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
+							<ul class="am-pagination am-pagination-right" id="page">
+								<li><a href="#">&laquo;</a></li>
+								<li th:each="i:${#numbers.sequence((row/5+1*5)-4,(row/5+1*5))}"  class="am-active" th:class="${row==i?'am-active':''}" th:if="${i<=page}"><a href="#" th:text="${i}"></a></li>
+								
 								<li><a href="#">&raquo;</a></li>
+							
 							</ul>
 
 						</div>
@@ -592,5 +423,25 @@
 <div class="theme-popover-mask"></div>
 
 	</body>
+	
+	
+	<script type="text/javascript" th:inline="javascript">
+		
+		var row = [[${row}]];
+		
+		var page=[[${page}]];
+		
+		
+		//$("#page").html("");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</script>
 
 </html>

@@ -48,7 +48,7 @@ public class UserController {
 		Users myself = userService.login(zhanghao, pwd);
 		if(myself!=null) {
 			session.setAttribute("myself", myself);
-			return "home/home.html";
+			return "redirect:show";
 		}else {
 			return "home/login.html";
 		}

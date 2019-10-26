@@ -5,6 +5,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 
+    
 logging:
   level:
    com.flsm.mapper: debug

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flsm.mapper.IProductMapper">
+	<select id="selectproductLike" resultMap="product">
+		
+		SELECT * from producttotal p 
+		<where>
+			
+			(p.pname like #{likestring} or p.productType like #{likestring} or productBrand like #{likestring})
+			<if test="type!=null">
+				and productType=#{type}
+			</if>
+			<if test="brand!=null">
+				and productBrand=#{brand}
+			</if>
+		</where>
+		<if test='order=="price"'>
+			 ORDER  BY  price 
+		</if>
+		<if test='order=="count"'>
+			 ORDER  BY  count desc 
+		</if>
+		<if test='order=="ecount"'>
+			 ORDER  BY  ecount  desc
+		</if>
+		
+	</select>
+
+	<select id="selectproductLikeCount" resultType="java.lang.Integer">
+		
+			SELECT count(*) from producttotal p 
+		<where>
+			
+			(p.pname like #{likestring} or p.productType like #{likestring} or productBrand like #{likestring})
+			<if test="type!=null">
+				and productType=#{type}
+			</if>
+			<if test="brand!=null">
+				and productBrand=#{brand}
+			</if>
+		</where>
+		<if test='order=="price"'>
+			 ORDER  BY  price 
+		</if>
+		<if test='order=="count"'>
+			 ORDER  BY  count desc 
+		</if>
+		<if test='order=="ecount"'>
+			 ORDER  BY  ecount  desc
+		</if>
+		</select>
+	
+	<select id="likeBrand" resultType="java.lang.String">
+		SELECT productBrand from producttotal p  where p.pname like #{likestring} or p.productType like #{likestring} or productBrand like #{likestring}
+		GROUP BY productBrand
+	</select>
+
+	<!--  -->
+	<select id="likeType"  resultType="java.lang.String">
+		SELECT productType from producttotal p  where p.pname like #{likestring} or p.productType like #{likestring} or productBrand like #{likestring}
+		GROUP BY productType
+	</select>
+	
+	<!-- 获取所有商品销量排行 -->
+	<select id="selectproductBycount" resultType="com.flsm.pojo.Product">
+		SELECT *  from producttotal p  ORDER BY count desc LIMIT #{num}
+	</select>
+	
+	
+	
+	<resultMap type="com.flsm.pojo.Product" id="product">
+		<id column="pid" property="pid"/>
+		<result property="pname" column="pname"/>
+		<result property="productType" column="productType"/>
+		<result property="productBrand" column="productBrand"/>
+		<result property="pexpress" column="pexpress"/>
+		<result property="Pexpressprice" column="Pexpressprice"/>
+		<result property="Salesvolume" column="count"/>
+		<result property="imgurl" column="url"/>
+		<result property="price" column="price"/>
+	</resultMap>
+	
+</mapper>
